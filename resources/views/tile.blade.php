@@ -1,22 +1,19 @@
 <x-dashboard-tile :position="$position">
-    <div 
+    <div
         wire:poll.{{ $refreshIntervalInSeconds }}s
         class="grid gap-2 justify-items-center h-full text-center"
     >
         @forelse ($forecasts as $forecast)
             @if ($loop->first)
-                <div class="font-medium text-dimmed uppercase tracking-wide">
-                    {{ $city }}
-                </div>
                 <div class="self-center font-bold text-5xl tracking-wide">
-                    {{ $forecast['temp'] }}&deg;
+                    {{ round($forecast['temp']) }}&deg;
                 </div>
                 <div class="capitalize text-dimmed">
                     {{ $forecast['weather']['description'] }}
                 </div>
             @else
-                <div class="grid grid-cols-3 py-1">
-                    <div class="flex items-center justify-start text-sm text-dimmed">
+                <div class="grid grid-cols-5 py-1">
+                    <div class="col-span-2 flex items-center justify-start text-sm text-dimmed">
                         {{ $forecast['dayName'] }}
                     </div>
                     <div class="flex items-center justify-center text-dimmed leading-none">
@@ -42,11 +39,10 @@
                             {{-- error --}}
                         @endif
                     </div>
-                    <div class="flex items-center justify-end text-sm text-dimmed">
-                        {{ $forecast['temp'] }}&deg;
-                        <svg class="flex-shrink-0 m-1 h-4 w-4" fill="currentColor" viewBox="0 0 24 24" style="transform: rotate({{ $forecast['wind']['deg'] }}deg);">
-                            <path class="heroicon-ui" d="M13 5.41V21a1 1 0 0 1-2 0V5.41l-5.3 5.3a1 1 0 1 1-1.4-1.42l7-7a1 1 0 0 1 1.4 0l7 7a1 1 0 1 1-1.4 1.42L13 5.4z"/>
-                        </svg>
+                    <div class="col-span-2 flex items-center divide-x justify-end text-xs text-dimmed">
+                        <span class="pr-1">{{ round($forecast['temp']['morn']) }}&deg;</span>
+                        <span class="px-1">{{ round($forecast['temp']['day']) }}&deg;</span>
+                        <span class="pl-1">{{ round($forecast['temp']['eve']) }}&deg;</span>
                     </div>
                 </div>
             @endif
